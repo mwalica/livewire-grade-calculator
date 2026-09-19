@@ -2,9 +2,12 @@
 
 use App\Models\Grade;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new class extends Component {
+
+new #[Title('Kalkulator ocen')]
+class extends Component {
     public int $maxPoints;
     public $grades;
     public array $gradesForm = [];
@@ -25,24 +28,25 @@ new class extends Component {
         $result = (float)($this->amount / $this->maxPoints);
         $this->grade = match (true) {
             $result >= (float)($this->grades[0]->percentage / 100) => ['name' => 'celujący', 'color' => 'blue', 'result' => $result],
-            $result >= (float) (($this->grades[1]->percentage / 100)  + 7 * $this->calcUnit($this->grades[0]->percentage, $this->grades[1]->percentage)) => ['name' => 'bardzo dobry', 'color' => 'gray800', 'result' => $result],
-            $result >= (float) (($this->grades[1]->percentage / 100)  + 3 * $this->calcUnit($this->grades[0]->percentage, $this->grades[1]->percentage)) => ['name' => 'bardzo dobry', 'color' => 'gray500', 'result' => $result],
-            $result >= (float)($this->grades[1]->percentage / 100)  => ['name' => 'bardzo dobry', 'color' => 'gray300', 'result' => $result],
-            $result >= (float) (($this->grades[2]->percentage / 100)  + 7 * $this->calcUnit($this->grades[1]->percentage, $this->grades[2]->percentage)) => ['name' => 'dobry', 'color' => 'green', 'result' => $result],
-            $result >= (float) (($this->grades[2]->percentage / 100)  + 3 * $this->calcUnit($this->grades[1]->percentage, $this->grades[2]->percentage)) => ['name' => 'dobry', 'color' => 'blue', 'result' => $result],
+            $result >= (float)(($this->grades[1]->percentage / 100) + 7 * $this->calcUnit($this->grades[0]->percentage, $this->grades[1]->percentage)) => ['name' => 'bardzo dobry', 'color' => 'gray800', 'result' => $result],
+            $result >= (float)(($this->grades[1]->percentage / 100) + 3 * $this->calcUnit($this->grades[0]->percentage, $this->grades[1]->percentage)) => ['name' => 'bardzo dobry', 'color' => 'gray500', 'result' => $result],
+            $result >= (float)($this->grades[1]->percentage / 100) => ['name' => 'bardzo dobry', 'color' => 'gray300', 'result' => $result],
+            $result >= (float)(($this->grades[2]->percentage / 100) + 7 * $this->calcUnit($this->grades[1]->percentage, $this->grades[2]->percentage)) => ['name' => 'dobry', 'color' => 'green', 'result' => $result],
+            $result >= (float)(($this->grades[2]->percentage / 100) + 3 * $this->calcUnit($this->grades[1]->percentage, $this->grades[2]->percentage)) => ['name' => 'dobry', 'color' => 'blue', 'result' => $result],
             $result >= (float)($this->grades[2]->percentage / 100) => ['name' => 'dobry', 'color' => 'red', 'result' => $result],
-            $result >= (float) (($this->grades[3]->percentage / 100)  + 7 * $this->calcUnit($this->grades[2]->percentage, $this->grades[3]->percentage)) => ['name' => 'dostateczny', 'color' => 'green', 'result' => $result],
-            $result >= (float) (($this->grades[3]->percentage / 100)  + 3 * $this->calcUnit($this->grades[2]->percentage, $this->grades[3]->percentage)) => ['name' => 'dostateczny', 'color' => 'blue', 'result' => $result],
+            $result >= (float)(($this->grades[3]->percentage / 100) + 7 * $this->calcUnit($this->grades[2]->percentage, $this->grades[3]->percentage)) => ['name' => 'dostateczny', 'color' => 'green', 'result' => $result],
+            $result >= (float)(($this->grades[3]->percentage / 100) + 3 * $this->calcUnit($this->grades[2]->percentage, $this->grades[3]->percentage)) => ['name' => 'dostateczny', 'color' => 'blue', 'result' => $result],
             $result >= (float)($this->grades[3]->percentage / 100) => ['name' => 'dostateczny', 'color' => 'red', 'result' => $result],
-            $result >= (float) (($this->grades[4]->percentage / 100)  + 7 * $this->calcUnit($this->grades[3]->percentage, $this->grades[4]->percentage)) => ['name' => 'dopuszczający', 'color' => 'green', 'result' => $result],
-            $result >= (float) (($this->grades[4]->percentage / 100)  + 3 * $this->calcUnit($this->grades[3]->percentage, $this->grades[4]->percentage)) => ['name' => 'dopuszczający', 'color' => 'blue', 'result' => $result],
+            $result >= (float)(($this->grades[4]->percentage / 100) + 7 * $this->calcUnit($this->grades[3]->percentage, $this->grades[4]->percentage)) => ['name' => 'dopuszczający', 'color' => 'green', 'result' => $result],
+            $result >= (float)(($this->grades[4]->percentage / 100) + 3 * $this->calcUnit($this->grades[3]->percentage, $this->grades[4]->percentage)) => ['name' => 'dopuszczający', 'color' => 'blue', 'result' => $result],
             $result >= (float)($this->grades[4]->percentage / 100) => ['name' => 'dopuszczający', 'color' => 'red', 'result' => $result],
             default => ['name' => 'niedostateczny', 'color' => 'red', 'result' => $result],
         };
     }
 
-    private function calcUnit($top, $bottom) {
-        return ($top/100 - $bottom/100) / 10;
+    private function calcUnit($top, $bottom)
+    {
+        return ($top / 100 - $bottom / 100) / 10;
     }
 
 
@@ -54,7 +58,7 @@ new class extends Component {
 //            $this->showLevels = false;
 //        }
 
-        if($this->maxPoints > 0) {
+        if ($this->maxPoints > 0) {
             $this->showLevels = !$this->showLevels;
         }
     }
@@ -78,7 +82,7 @@ new class extends Component {
             </flux:field>
             <flux:field>
                 <flux:button type="button" variant="primary" wire:click="calc" :disabled="$maxPoints <= 0"
-                             class="cursor-pointer">Progi punktowe
+                             class="cursor-pointer">{{$showLevels ? 'Ukryj' : 'Pokaż'}} progi punktowe
                 </flux:button>
             </flux:field>
         </div>
@@ -99,7 +103,8 @@ new class extends Component {
             <flux:slider wire:model.live="amount" :max="$maxPoints" :step="$step"/>
         </flux:field>
         @if(!empty($grade))
-            <flux:text class="text-lg" :color="$grade['color']">{{round($grade['result']*100, 1)}}% {{$grade['name']}}</flux:text>
+            <flux:text class="text-lg" :color="$grade['color']">{{round($grade['result']*100, 1)}}
+                % {{$grade['name']}}</flux:text>
         @endif
     </flux:card>
     @if($showLevels)
@@ -109,7 +114,8 @@ new class extends Component {
             <ul class="flex flex-col gap-4 divide-y divide-gray-200">
                 @foreach($grades as $grade)
                     <li class="divide-amber-900 pb-4"
-                        wire:key="{{$grade->id}}">{{mb_strtoupper($grade->name)}} <br>{{round(($grade->percentage/100) * $maxPoints * 2) / 2}}</li>
+                        wire:key="{{$grade->id}}">{{mb_strtoupper($grade->name)}}
+                        <br>{{round(($grade->percentage/100) * $maxPoints * 2) / 2}}</li>
                 @endforeach
             </ul>
         </flux:card>
@@ -126,7 +132,7 @@ new class extends Component {
                     <flux:input wire:key="{{$g->id}}" label="{{$g->name}}" wire:model="gradesForm.{{$g->id}}"/>
                 @endforeach
                 <flux:field class="self-end mt-4">
-                    <flux:button class="cursor-pointer" type="submit" variant="primary" >Save changes</flux:button>
+                    <flux:button class="cursor-pointer" type="submit" variant="primary">Save changes</flux:button>
                 </flux:field>
             </form>
 
