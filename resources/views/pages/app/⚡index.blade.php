@@ -10,7 +10,6 @@ new #[Title('Kalkulator ocen')]
 class extends Component {
     public ?int $maxPoints = null;
     public $grades;
-    public array $gradesForm = [];
     public $grade = [];
     public $showLevels = false;
     public $amount = 0;
@@ -25,7 +24,7 @@ class extends Component {
 
     public function updatedMaxPoints(): void
     {
-        if($this->maxPoints === null || $this->maxPoints <= 0) {
+        if ($this->maxPoints === null || $this->maxPoints <= 0) {
             $this->amount = 0;
             $this->grade = [];
         }
@@ -33,7 +32,7 @@ class extends Component {
 
     public function updatedAmount(): void
     {
-        if($this->maxPoints === null || $this->maxPoints <= 0) {
+        if ($this->maxPoints === null || $this->maxPoints <= 0) {
             $this->grade = [];
             return;
         }
@@ -70,14 +69,6 @@ class extends Component {
         }
     }
 
-    public function save()
-    {
-        foreach ($this->gradesForm as $id => $percentage) {
-            Grade::where('id', $id)->update(['percentage' => $percentage]);
-        }
-
-        $this->modal('settings')->close();
-    }
 };
 ?>
 
@@ -109,8 +100,9 @@ class extends Component {
             </flux:label>
             <flux:slider wire:model.live="amount" min="0" :max="$maxPoints" :step="$step"/>
         </flux:field>
-            <flux:text @class(['text-lg', 'mt-4', 'invisible' => empty($grade) || $maxPoints<=0]) :color="$grade['color'] ?? 'red'">{{round((data_get($grade, 'result') ?? 0) * 100, 1)}}
-                % {{$grade['name'] ?? ''}}</flux:text>
+        <flux:text
+            @class(['text-lg', 'mt-4', 'invisible' => empty($grade) || $maxPoints<=0]) :color="$grade['color'] ?? 'red'">{{round((data_get($grade, 'result') ?? 0) * 100, 1)}}
+            % {{$grade['name'] ?? ''}}</flux:text>
     </flux:card>
     @if($showLevels)
         <flux:card>
@@ -130,7 +122,8 @@ class extends Component {
                     @foreach($grades as $grade)
                         <flux:table.row wire:key="{{$grade->id}}">
                             <flux:table.cell variant="strong">
-                                <span class="tracking-wide text-sky-800 dark:text-sky-300">{{Str::upper($grade->name)}}</span>
+                                <span
+                                    class="tracking-wide text-sky-800 dark:text-sky-300">{{Str::upper($grade->name)}}</span>
                             </flux:table.cell>
                             <flux:table.cell align="center">
                                 {{round($grade->percentage/100 * $maxPoints * 2) / 2}}
@@ -146,22 +139,5 @@ class extends Component {
         </flux:card>
 
     @endif
-    <flux:modal name="settings" class="md:w-96">
-        <div class="space-y-6">
-            <div>
-                <flux:heading size="lg">Ustawienia</flux:heading>
-                <flux:text class="mt-2">Zmień progi procentowa na poszczególne oceny</flux:text>
-            </div>
-            <form wire:submit="save" class="flex flex-col gap-4">
-                @foreach($grades as $g)
-                    <flux:input wire:key="{{$g->id}}" label="{{$g->name}}" wire:model="gradesForm.{{$g->id}}"/>
-                @endforeach
-                <flux:field class="self-end mt-4">
-                    <flux:button class="cursor-pointer" type="submit" variant="primary">Zapisz zmiany</flux:button>
-                </flux:field>
-            </form>
-
-
-        </div>
-    </flux:modal>
+    <livewire:settings />
 </section>
