@@ -21,10 +21,10 @@ new class extends Component {
         $temp = 101;
         foreach ($this->gradesForm as $id => $percentage) {
             if ($id === 1 && $percentage > 100) {
-                Flux::toast('Wprowadzono niepoprawny prog procentowy dla celujący');
+                Flux::toast(duration: 2000, variant: 'warning', text: 'Wprowadzono niepoprawne progi procentowe');
                 return;
             } elseif ($percentage >= $temp) {
-                Flux::toast('Wprowadzono niepoprawne progi procentowe');
+                Flux::toast(duration: 2000, variant: 'warning', text: 'Wprowadzono niepoprawne progi procentowe');
                 return;
             }
 

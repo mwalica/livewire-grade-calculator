@@ -16,12 +16,12 @@
     @livewireStyles
 </head>
 <body class="bg-zinc-50 dark:bg-zinc-900">
-<flux:header class="flex mx-auto w-2/3 max-w-3xl">
-    <flux:heading level="1" size="xl" class="ms-4">Kalkulator ocen</flux:heading>
+<flux:header class="flex mx-auto mt-1 w-2/3 max-w-3xl flex-col gap-2 sm:flex-row">
+    <flux:heading level="1"  class="text-2xl! text-sky-800 dark:text-sky-300">Kalkulator ocen</flux:heading>
     <flux:spacer/>
     <div class="flex gap-4 items-center">
         <flux:modal.trigger name="settings">
-            <flux:button icon="cog-6-tooth"/>
+            <flux:button size="sm" icon="cog-6-tooth"/>
         </flux:modal.trigger>
 
         <flux:switch x-data x-model="$flux.dark" label="Ciemny motyw"/>
@@ -30,7 +30,7 @@
 </flux:header>
 <flux:main container class="max-w-3xl">
     {{ $slot }}
-    <flux:toast/>
+    <flux:toast position="bottom center" />
 </flux:main>
 
 
