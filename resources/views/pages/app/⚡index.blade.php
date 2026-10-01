@@ -129,7 +129,7 @@ class extends Component {
                                 {{round($grade->percentage/100 * $maxPoints * 2) / 2}}
                             </flux:table.cell>
                             <flux:table.cell align="center">
-                                {{$grade->percentage}}%
+                                {{round(((round($grade->percentage/100 * $maxPoints * 2) / 2) / $maxPoints)*100, 1)}}%
                             </flux:table.cell>
                         </flux:table.row>
                     @endforeach
